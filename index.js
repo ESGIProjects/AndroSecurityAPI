@@ -23,7 +23,7 @@ app.get('/', function(req, res) {
 				var message = {
 					'id': row.id,
 					'number': row.number,
-					'message': row.description,
+					'message': row.message,
 					'lat': row.lat,
 					'lng': row.lng
 				};
@@ -59,7 +59,7 @@ app.post('/messages', function(req, res) {
     console.log(message);
 
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(message));
+    res.status(201).json(message);
 });
 
 app.listen(port, function() {
