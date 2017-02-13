@@ -1,0 +1,25 @@
+html
+    head
+        title AndroSecurity Database
+        link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Roboto')
+        link(rel='stylesheet', type='text/css', href='style.css')
+    body
+        h1 Messages
+        table
+            tr
+                th ID
+                th Numéro
+                th Message
+                th Latitude
+                th Longitude
+                th date
+                th Version d'Android
+            each message in messages
+                tr
+                    td= message.id
+                    td= message.number
+                    td= message.message
+                    td= message.lat
+                    td= message.lng
+                    td= message.date
+                    td= message.androidVersion
