@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/api/users', function(req, res) {
+app.post('/messages', function(req, res) {
     var db = new sqlite3.Database('messages.db');
 
     var number = req.body.number;
