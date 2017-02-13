@@ -12,24 +12,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/messages', function(req, res) {
     var db = new sqlite3.Database('messages.db');
 
-    var number = req.body.number;
-    var message = req.body.message;
-    var lat = req.body.lat;
-    var lng = req.body.lng;
+    var message = {
+        'number': req.body.number,
+        'message': req.body.message,
+        'lat': req.body.lat,
+        'lng': req.body.lng
+    };
 
     db.run("CREATE TABLE if not exists messages (number TEXT, message TEXT, lat REAL, lng REAL)");
 
     db.serialize(function() {
         var stmt = db.prepare("INSERT INTO messages (number, message, lat, lng) VALUES(?, ?, ?, ?)");
-        stmt.run(number, message, lat, lng);
+        stmt.run(message['number'], message['message'], message['lat'], message['lng']);
         stmt.finalize();
     });
     db.close();
 
-    console.log(req.body);
+    console.log(message);
 
     res.setHeader('Content-Type', 'application/json');
-    res.send(req.body);
+    res.send(JSON.stringify(message));
 });
 
 app.listen(port, function() {
