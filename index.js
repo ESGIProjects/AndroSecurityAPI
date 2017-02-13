@@ -3,6 +3,8 @@ var sqlite3 = require('sqlite3').verbose();
 
 var app = express();
 
+var port = process.env.PORT || 8080;
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,4 +29,6 @@ app.post('/messages', function(req, res) {
     res.send(req.body);
 });
 
-app.listen(8080);
+app.listen(port, function() {
+    console.log("Running on port " + port);
+});
