@@ -3,7 +3,6 @@ var sqlite3 = require('sqlite3').verbose();
 
 var app = express();
 
-var db = new sqlite3.Database('messages.db');
 var port = process.env.PORT || 8080;
 
 var bodyParser = require('body-parser');
@@ -11,6 +10,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(req, res) {
+    var db = new sqlite3.Database('messages.db');
+
     var messages = [];
 
 	db.serialize(function() {
@@ -37,6 +38,8 @@ app.get('/', function(req, res) {
 });
 
 app.post('/messages', function(req, res) {
+    var db = new sqlite3.Database('messages.db');
+
     var message = {
         'number': req.body.number,
         'message': req.body.message,
