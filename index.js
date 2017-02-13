@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
     var messages = [];
 
 	db.serialize(function() {
-		db.each("SELECT messages.rowid AS id, messages.number, messages.message, messages.lat, messages.lng FROM messages ORDER BY id", function(err, row) {
+		db.each("SELECT messages.rowid AS id, messages.number, messages.message, messages.lat, messages.lng, messages.date, messages.androidVersion FROM messages ORDER BY id", function(err, row) {
 			if (err) {
 				console.error(err);
 			}
@@ -25,13 +25,15 @@ app.get('/', function(req, res) {
 					'number': row.number,
 					'message': row.message,
 					'lat': row.lat,
-					'lng': row.lng
+					'lng': row.lng,
+					'date': row.date,
+					'androidVersion': row.androidVersion
 				};
 				messages.push(message);
 			}
 		}, function() {
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify(messages));
+			res.status(200).json(messages);
 		});
 	});
 	db.close();
@@ -44,14 +46,16 @@ app.post('/messages', function(req, res) {
         'number': req.body.number,
         'message': req.body.message,
         'lat': req.body.lat,
-        'lng': req.body.lng
+        'lng': req.body.lng,
+        'date': req.body.date,
+        'androidVersion': req.body.androidVersion
     };
 
-    db.run("CREATE TABLE if not exists messages (number TEXT, message TEXT, lat REAL, lng REAL)");
+    db.run("CREATE TABLE if not exists messages (number TEXT, message TEXT, lat REAL, lng REAL, date TEXT, androidVersion TEXT)");
 
     db.serialize(function() {
-        var stmt = db.prepare("INSERT INTO messages (number, message, lat, lng) VALUES(?, ?, ?, ?)");
-        stmt.run(message['number'], message['message'], message['lat'], message['lng']);
+        var stmt = db.prepare("INSERT INTO messages (number, message, lat, lng, date, androidVersion) VALUES(?, ?, ?, ?, ?, ?)");
+        stmt.run(message['number'], message['message'], message['lat'], message['lng'], message['date'], message['androidVersion']);
         stmt.finalize();
     });
     db.close();
