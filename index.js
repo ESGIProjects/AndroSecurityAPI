@@ -27,6 +27,8 @@ app.post('/messages', function(req, res) {
     db.close();
 
     console.log(req.body);
+
+    res.setHeader('Content-Type', 'application/json');
     res.send(req.body);
 });
 
